@@ -1,0 +1,28 @@
+# Render Blueprint for the Trao API.
+# Deploy: New > Blueprint > point at this repo, root directory = `server`.
+services:
+  - type: web
+    name: trao-api
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: CLIENT_ORIGIN
+        sync: false # set to your Vercel URL, e.g. https://trao.vercel.app
+      - key: MONGODB_URI
+        sync: false # MongoDB Atlas connection string
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: GROQ_API_KEY
+        sync: false # your Groq API key
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile

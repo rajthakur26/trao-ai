@@ -12,8 +12,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 5000
+      # NOTE: do not set PORT — Render injects it and the app binds to it.
       - key: CLIENT_ORIGIN
         sync: false # set to your Vercel URL, e.g. https://trao.vercel.app
       - key: MONGODB_URI
@@ -26,3 +25,5 @@ services:
         sync: false # your Groq API key
       - key: GROQ_MODEL
         value: llama-3.3-70b-versatile
+      - key: DEFAULT_CURRENCY
+        value: INR

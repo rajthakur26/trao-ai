@@ -1,11 +1,26 @@
+import env from '../../config/env.js';
+
 /**
  * Deterministic fallback "agent". Used when GROQ_API_KEY is not configured, or
  * when a live LLM call fails. It keeps the entire app functional (and the demo
  * reproducible) without any external dependency. The output deliberately mirrors
  * the real agent's JSON shape so downstream code is identical.
+ *
+ * Base costs are tuned for Indian Rupees (the default currency). If a different
+ * DEFAULT_CURRENCY is configured, set BASE_COSTS accordingly.
  */
 
 const BUDGET_MULTIPLIER = { Low: 0.6, Medium: 1, High: 1.8 };
+
+// Per-traveller base costs in the default currency (INR).
+const BASE = {
+  flights: 22000, // round-trip estimate
+  accommodationPerNight: 3500,
+  foodPerDay: 1500,
+  activitiesPerDay: 1200,
+  transportPerDay: 600,
+};
+const HOTEL_BASE = { budget: 1500, mid: 4000, luxury: 11000 };
 
 const ACTIVITY_BANK = {
   Food: ['Street food crawl', 'Local cooking class', 'Famous food market', 'Rooftop dinner'],
@@ -46,12 +61,12 @@ export function mockPlan({ destination, days, budgetType, interests }) {
 
   const m = BUDGET_MULTIPLIER[budgetType] || 1;
   const budget = {
-    currency: 'USD',
-    flights: Math.round(400 * m),
-    accommodation: Math.round(60 * m * days),
-    food: Math.round(35 * m * days),
-    activities: Math.round(30 * m * days),
-    transport: Math.round(15 * m * days),
+    currency: env.currency,
+    flights: Math.round(BASE.flights * m),
+    accommodation: Math.round(BASE.accommodationPerNight * m * days),
+    food: Math.round(BASE.foodPerDay * m * days),
+    activities: Math.round(BASE.activitiesPerDay * m * days),
+    transport: Math.round(BASE.transportPerDay * m * days),
     total: 0,
     notes: `Estimated for one traveller at a ${budgetType} budget level (offline estimate).`,
   };
@@ -62,21 +77,21 @@ export function mockPlan({ destination, days, budgetType, interests }) {
     {
       name: `${destination} City Hostel`,
       tier: 'Budget Friendly',
-      pricePerNight: Math.round(35 * m),
+      pricePerNight: Math.round(HOTEL_BASE.budget * m),
       rating: 4.1,
       description: 'Clean, central, great for budget travellers.',
     },
     {
       name: `Grand ${destination} Hotel`,
       tier: 'Mid Range',
-      pricePerNight: Math.round(90 * m),
+      pricePerNight: Math.round(HOTEL_BASE.mid * m),
       rating: 4.4,
       description: 'Comfortable 3-4 star stay near the main sights.',
     },
     {
       name: `The ${destination} Palace`,
       tier: 'Luxury',
-      pricePerNight: Math.round(240 * m),
+      pricePerNight: Math.round(HOTEL_BASE.luxury * m),
       rating: 4.8,
       description: 'Premium 5-star experience with top-tier amenities.',
     },

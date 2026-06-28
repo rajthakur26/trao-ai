@@ -20,7 +20,7 @@ export const daySchema = z.object({
 });
 
 export const budgetSchema = z.object({
-  currency: z.string().default('USD'),
+  currency: z.string().default('INR'),
   flights: z.number().nonnegative().default(0),
   accommodation: z.number().nonnegative().default(0),
   food: z.number().nonnegative().default(0),

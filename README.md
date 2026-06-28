@@ -119,7 +119,7 @@ model output can never corrupt the database or break the UI.
 
 **How it's made robust:**
 - **System prompt** fixes persona + hard rules (budget realism per level,
-  3-5 activities/day, USD).
+  3-5 activities/day, currency).
 - **Groq JSON mode** (`response_format: json_object`) forces parseable output.
 - **Zod schemas** validate every response; the **budget total is recomputed**
   server-side; the **day count is normalised** to exactly what the user asked.
@@ -127,6 +127,10 @@ model output can never corrupt the database or break the UI.
   deterministic generator produces the same JSON shape, so the app stays fully
   functional (great for demos/offline). The API response includes
   `meta.source: "groq" | "mock"` for transparency.
+- **Localised currency** — budgets/prices default to **Indian Rupees (₹, INR)**
+  since the target users are in India; the agent is prompted for realistic
+  Indian-market costs and the UI formats with lakh grouping. Configurable via
+  `DEFAULT_CURRENCY`.
 
 **Why the concierge returns operations instead of mutating directly:** the LLM
 never touches the database. It only _proposes_ structured edits; the server

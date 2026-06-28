@@ -9,12 +9,21 @@
  *   activity counts, currency) so results are consistent across requests.
  */
 
+import env from '../../config/env.js';
+
+const CURRENCY = env.currency; // e.g. "INR"
+const CURRENCY_HINT =
+  CURRENCY === 'INR'
+    ? 'Indian Rupees (INR, ₹). Use realistic Indian-market prices a traveller from India would actually pay.'
+    : `${CURRENCY}.`;
+
 export const SYSTEM_PROMPT = `You are "Trao", an expert travel-planning agent.
 You design realistic, well-paced, day-by-day itineraries and estimate costs.
 
 Hard rules:
 - Always respond with VALID JSON only. No markdown, no prose outside the JSON.
-- Costs are realistic estimates in USD for ONE traveller unless told otherwise.
+- Costs are realistic estimates for ONE traveller, expressed in ${CURRENCY_HINT}
+  Set every "currency" field to "${CURRENCY}".
 - A "Low" budget means hostels/street food/public transport; "Medium" means
   3-star hotels and mid-range restaurants; "High" means 4-5 star hotels and
   premium experiences. Scale every cost accordingly.
@@ -30,7 +39,7 @@ const PLAN_SHAPE = `{
     ] }
   ],
   "budget": {
-    "currency": "USD",
+    "currency": "${CURRENCY}",
     "flights": number, "accommodation": number, "food": number,
     "activities": number, "transport": number, "total": number,
     "notes": "short string explaining assumptions"

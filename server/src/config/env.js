@@ -18,6 +18,8 @@ const env = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
   groqApiKey: process.env.GROQ_API_KEY || '',
   groqModel: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+  // Default currency for budgets/prices (ISO 4217 code). INR for Indian users.
+  currency: process.env.DEFAULT_CURRENCY || 'INR',
 };
 
 env.isProduction = env.nodeEnv === 'production';

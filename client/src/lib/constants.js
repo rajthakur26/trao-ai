@@ -46,14 +46,18 @@ export function categoryIcon(category) {
   return CATEGORY_ICONS[category] || Sparkles;
 }
 
-export function formatCurrency(amount, currency = 'USD') {
+// Use the Indian locale for INR so amounts group as lakhs (e.g. ₹1,20,000).
+const LOCALE_BY_CURRENCY = { INR: 'en-IN' };
+
+export function formatCurrency(amount, currency = 'INR') {
+  const code = currency || 'INR';
   try {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat(LOCALE_BY_CURRENCY[code] || 'en-US', {
       style: 'currency',
-      currency,
+      currency: code,
       maximumFractionDigits: 0,
     }).format(amount || 0);
   } catch {
-    return `$${Math.round(amount || 0)}`;
+    return `${Math.round(amount || 0)} ${code}`;
   }
 }

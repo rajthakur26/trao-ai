@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import env from '../config/env.js';
 
 const activitySchema = new mongoose.Schema(
   {
@@ -34,7 +35,7 @@ const hotelSchema = new mongoose.Schema(
 
 const budgetSchema = new mongoose.Schema(
   {
-    currency: { type: String, default: 'USD' },
+    currency: { type: String, default: () => env.currency },
     flights: { type: Number, default: 0 },
     accommodation: { type: Number, default: 0 },
     food: { type: Number, default: 0 },

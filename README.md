@@ -45,7 +45,7 @@ Concierge**.
 | Frontend | **Next.js 14 (App Router) + Tailwind CSS** | Matches the preferred stack; App Router gives clean file-based routing; Tailwind for fast, consistent, responsive UI. |
 | Backend | **Node.js + Express** | Matches the preferred stack. Kept as a **separate service** for clean separation of concerns and independent scaling. |
 | Database | **MongoDB + Mongoose** | Itineraries are nested, document-shaped data (days → activities) — a natural fit for a document store. Mongoose adds schema validation. |
-| LLM | **Groq (`llama-3.3-70b-versatile`)** | Extremely fast inference + a generous free tier, with an OpenAI-compatible JSON mode. Wrapped behind an adapter so the provider is swappable. |
+| LLM | **Groq (`openai/gpt-oss-120b`)** | Extremely fast inference + a generous free tier, with an OpenAI-compatible JSON mode. Wrapped behind an adapter so the model/provider is swappable via `GROQ_MODEL`. |
 | Language | **JavaScript (ESM)** | Per the assessment; kept clean with a layered architecture. |
 
 This repo is a **monorepo** with two independently deployable apps:

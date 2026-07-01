@@ -17,7 +17,7 @@ const env = {
   jwtSecret: process.env.JWT_SECRET || 'dev_insecure_secret_change_me',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
   groqApiKey: process.env.GROQ_API_KEY || '',
-  groqModel: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+  groqModel: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
   // Default currency for budgets/prices (ISO 4217 code). INR for Indian users.
   currency: process.env.DEFAULT_CURRENCY || 'INR',
 };

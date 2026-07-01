@@ -71,9 +71,10 @@ const tripSchema = new mongoose.Schema(
     budget: { type: budgetSchema, default: () => ({}) },
     hotels: { type: [hotelSchema], default: [] },
 
-    // Optional public read-only share token (creative feature). Sparse so docs
-    // without a token don't collide on the unique index.
-    shareToken: { type: String, default: null, index: true, sparse: true, unique: true },
+    // Optional public read-only share token (creative feature). Uniqueness is
+    // enforced via a PARTIAL index below (only on real string tokens), so many
+    // trips can share the `null` default without colliding.
+    shareToken: { type: String, default: null },
 
     status: {
       type: String,
@@ -82,6 +83,13 @@ const tripSchema = new mongoose.Schema(
     },
   },
   { timestamps: true }
+);
+
+// Uniqueness only applies to actual share tokens (strings). Trips with the
+// default `null` share token are excluded, so they never collide.
+tripSchema.index(
+  { shareToken: 1 },
+  { unique: true, partialFilterExpression: { shareToken: { $type: 'string' } } }
 );
 
 tripSchema.set('toJSON', {
